@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <div className='holder'>
-      <h1>Awesome Garden</h1>
+      <h1>Awesome Garden 2</h1>
 
       <div className="device" id="device" style={{"--progress": `${sensorValue !== null ? sensorValue : 0}%`}}>
         <div className="number" id="number">{sensorValue}%</div>
