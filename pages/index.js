@@ -1,41 +1,25 @@
-import { useEffect, useState } from 'react';
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
 
-export default function Home() {
-  const [sensorValue, setSensorValue] = useState(null);
+const app = express();
+const port = 8000;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://awesome-garden-test.vercel.app/api/data');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setSensorValue(data.value); // Ensure your data object has a property called `value`
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+// Use body-parser middleware to parse JSON request bodies
+app.use(bodyParser.json());
 
-    fetchData();
-  }, []);
+app.post('/', (req, res) => {
+	console.log(req.body);
+	fs.writeFile('output.json', JSON.stringify(req.body), (err) => {
+		if (err) {
+			console.error(err);
+			res.status(500).send('Internal Server Error');
+		} else {
+			res.send('Data received');
+		}
+	});
+});
 
-  return (
-    <div className='holder'>
-      <h1>Awesome Garden</h1>
-
-      <div className="device" id="device" style={{"--progress": `${sensorValue !== null ? sensorValue : 0}%`}}>
-        <div className="number" id="number">{sensorValue}%</div>
-      
-        <div className="glass-container">
-          <div className="glass"></div>
-          <div className="liquid">
-            <div className="bg"></div>
-            <div className="bubbles"></div>
-          </div>
-          <div className="glass-reflection"></div>
-        </div>
-      </div>
-    </div>
-  );
-}
+app.listen(port, () => {
+	console.log(`Listening on port ${port}`);
+});
