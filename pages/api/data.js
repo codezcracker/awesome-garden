@@ -10,6 +10,11 @@ export default function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Authorization, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
+
+
+console.log(req.body);
+
+  
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
     res.status(200).end();
