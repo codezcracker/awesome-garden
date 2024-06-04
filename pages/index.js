@@ -5,16 +5,26 @@ import { ref, onValue } from "firebase/database";
 export default function Home() {
   const [sensorValue, setSensorValue] = useState(null);
 
-  useEffect(() => {
-    const dbRef = ref(database, 'data');
-    onValue(dbRef, (snapshot) => {
-      const value = snapshot.val();
-      setSensorValue(value);
-    }, (error) => {
-      console.error("Error fetching data: ", error);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const dbRef = ref(database, 'data');
+  //   onValue(dbRef, (snapshot) => {
+  //     const value = snapshot.val();
+  //     setSensorValue(value);
+  //   }, (error) => {
+  //     console.error("Error fetching data: ", error);
+  //   });
+  // }, []);
 
+const url = 'https://awesome-garden-test.vercel.app/api/data.json'; // Replace with your actual URL
+
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    // Process the data
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
 
 
   
