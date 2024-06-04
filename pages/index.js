@@ -1,23 +1,40 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { useEffect, useState } from 'react';
+import { database } from '../firebase';
+import { ref, onValue } from "firebase/database";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Check for POST request method
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
+export default function Home() {
+  const [sensorValue, setSensorValue] = useState(null);
 
-  // Access the request body (assuming JSON data)
-  const { analog_value } = req.body;
+  useEffect(() => {
+    const dbRef = ref(database, 'data');
+    onValue(dbRef, (snapshot) => {
+      const value = snapshot.val();
+      setSensorValue(value);
+    }, (error) => {
+      console.error("Error fetching data: ", error);
+    });
+  }, []);
 
-  // Validate and process the data (replace with your logic)
-  if (!analogValue || typeof analogValue !== 'number') {
-    return res.status(400).json({ message: 'Invalid data format' });
-  }
 
-  console.log(`Received analog value: ${analogValue}`);
 
-  // You can store the data in a database, send it to another service, etc.
+  
+  return (
+    <div className='holder'>
+      <h1>Awesome Garden</h1>
 
-  // Send a success response
-  return res.status(200).json({ message: 'Data received successfully' });
+      <div className="device" id="device" style={{"--progress": `${sensorValue !== null ? sensorValue : 0}%`}}>
+        <div className="number" id="number">{sensorValue}%</div>
+      
+        <div className="glass-container">
+          <div className="glass"></div>
+          <div className="liquid">
+            <div className="bg"></div>
+            <div className="bubbles"></div>
+          </div>
+          <div className="glass-reflection"></div>
+        </div>
+      </div>
+
+    </div>
+  );
 }
