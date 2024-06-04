@@ -1,25 +1,23 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const fs = require('fs');
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const app = express();
-const port = 8000;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Check for POST request method
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
 
-// Use body-parser middleware to parse JSON request bodies
-app.use(bodyParser.json());
+  // Access the request body (assuming JSON data)
+  const { analog_value } = req.body;
 
-app.post('/', (req, res) => {
-	console.log(req.body);
-	fs.writeFile('output.json', JSON.stringify(req.body), (err) => {
-		if (err) {
-			console.error(err);
-			res.status(500).send('Internal Server Error');
-		} else {
-			res.send('Data received');
-		}
-	});
-});
+  // Validate and process the data (replace with your logic)
+  if (!analogValue || typeof analogValue !== 'number') {
+    return res.status(400).json({ message: 'Invalid data format' });
+  }
 
-app.listen(port, () => {
-	console.log(`Listening on port ${port}`);
-});
+  console.log(`Received analog value: ${analogValue}`);
+
+  // You can store the data in a database, send it to another service, etc.
+
+  // Send a success response
+  return res.status(200).json({ message: 'Data received successfully' });
+}
