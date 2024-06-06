@@ -15,7 +15,7 @@ export default function Home() {
   //   });
   // }, []);
 
-const url = 'https://awesome-garden-test.vercel.app/api/data.json'; // Replace with your actual URL
+const url = 'https://awesome-garden-test.vercel.app/api/data.js'; // Replace with your actual URL
 
 fetch(url)
   .then(response => response.json())
